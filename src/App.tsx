@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'react-tabulator/lib/styles.css'; // default theme
 import 'react-tabulator/css/bootstrap/tabulator_bootstrap.min.css'; // use Theme(s)
@@ -13,28 +12,23 @@ function App() {
     { title: 'Email', field: 'email', width: 150 }
   ];
   const options = {
-    height: 100,
+    height: '300px',
     movableRows: true,
-    progressiveLoad: 'scroll',
-    progressiveLoadDelay: 200,
-    progressiveLoadScrollMargin: 30,
+    pagination: true,
+    paginationSize: 6,
+    paginationMode: 'remote',
     ajaxURL: 'https://reqres.in/api/users',
-    dataSendParams: {
-      page: 'page',
-      size: 'per_page'
-    },
-    dataReceiveParams: {
-      last_page: 'last'
-    },
-    paginationSize: 5,
     ajaxResponse: (url: string, params: any, response: any) => {
       console.log('url, params, response', url, params, response);
       return {
         data: response.data,
-        last: response.total_pages
+        last_page: response.total_pages
       };
     },
-    ajaxError: function (error: any) {
+  };
+
+  const events = {
+    dataLoadError: (error: any) => {
       console.log('ajaxError', error);
     }
   };
@@ -44,19 +38,7 @@ function App() {
       <ReactTabulator
         columns={columns}
         options={options}
-        events={{
-          dataLoaded: function (data: any) {
-            console.log('dataLoaded', data);
-            // return data; //return the response data to tabulator
-            let modResponse: any = {};
-            modResponse.data = data;
-            modResponse.last = 5;
-            return modResponse;
-          },
-          ajaxError: function (error: any) {
-            console.log('ajaxError', error);
-          }
-        }}
+        events={events}
       />
     </div>
   );
