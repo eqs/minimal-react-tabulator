@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import 'react-tabulator/lib/styles.css'; // default theme
 import 'react-tabulator/css/bootstrap/tabulator_bootstrap.min.css'; // use Theme(s)
 import { ReactTabulator } from 'react-tabulator';
+
+function LikeButton() {
+  const [count, setCount] = useState(0);
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+  return (
+    <span className="likeButton" onClick={handleClick}>
+      ♥ {count}
+    </span>
+  );
+}
 
 function App() {
   const columns = [
@@ -35,6 +47,7 @@ function App() {
 
   return (
     <div className="App">
+      <LikeButton />
       <ReactTabulator
         columns={columns}
         options={options}
